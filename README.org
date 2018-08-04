@@ -1,4 +1,6 @@
 #+TITLE: Docker Experiments
+A Self Sufficient RT for containers.
+
 *** Commands
 #+BEGIN_SRC shell
 docker version

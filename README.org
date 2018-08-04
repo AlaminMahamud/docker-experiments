@@ -77,3 +77,20 @@ docker info
 | 127.0.0.0/8   |                                                             |                                          |                 |      |          |           |            |        |        |
 | Live          | Restore                                                     | Enabled:                                 | false           |      |          |           |            |        |        |
 |               |                                                             |                                          |                 |      |          |           |            |        |        |
+
+Docker Options
+#+BEGIN_SRC python
+"""
+      --config string      Location of client config files (default "/home/alamin/.docker")
+  -D, --debug              Enable debug mode
+  -H, --host list          Daemon socket(s) to connect to
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/home/alamin/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/home/alamin/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/home/alamin/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+"""
+#+END_SRC

@@ -78,7 +78,7 @@ docker info
 | Live          | Restore                                                     | Enabled:                                 | false           |      |          |           |            |        |        |
 |               |                                                             |                                          |                 |      |          |           |            |        |        |
 
-Docker Options
+**** Options
 #+BEGIN_SRC python
 """
       --config string      Location of client config files (default "/home/alamin/.docker")
@@ -94,3 +94,27 @@ Docker Options
 
 """
 #+END_SRC
+
+**** Management Commands
+#+BEGIN_SRC python
+"""
+  config      Manage Docker configs
+  container   Manage containers
+  image       Manage images
+  network     Manage networks
+  node        Manage Swarm nodes
+  plugin      Manage plugins
+  secret      Manage Docker secrets
+  service     Manage services
+  swarm       Manage Swarm
+  system      Manage Docker
+  trust       Manage trust on Docker images
+  volume      Manage volumes
+"""
+#+END_SRC
+
+Syntax
+#+BEGIN_SRC shell
+docker <management-command> <sub-command> (options)
+#+END_SRC
+

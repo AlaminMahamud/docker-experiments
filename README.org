@@ -1,0 +1,26 @@
+#+TITLE: Docker Experiments
+*** Commands
+#+BEGIN_SRC shell
+docker version
+#+END_SRC
+
+#+RESULTS:
+| Client:       |             |         |          |          |       |
+| Version:      | 18.03.1-ce  |         |          |          |       |
+| API           | version:    | 1.37    |          |          |       |
+| Go            | version:    | go1.9.5 |          |          |       |
+| Git           | commit:     | 9ee9f40 |          |          |       |
+| Built:        | Wed         | Jun     |       20 | 21:43:51 |  2018 |
+| OS/Arch:      | linux/amd64 |         |          |          |       |
+| Experimental: | false       |         |          |          |       |
+| Orchestrator: | swarm       |         |          |          |       |
+|               |             |         |          |          |       |
+| Server:       |             |         |          |          |       |
+| Engine:       |             |         |          |          |       |
+| Version:      | 18.03.1-ce  |         |          |          |       |
+| API           | version:    | 1.37    | (minimum |  version | 1.12) |
+| Go            | version:    | go1.9.5 |          |          |       |
+| Git           | commit:     | 9ee9f40 |          |          |       |
+| Built:        | Wed         | Jun     |       20 | 21:42:00 |  2018 |
+| OS/Arch:      | linux/amd64 |         |          |          |       |
+| Experimental: | false       |         |          |          |       |

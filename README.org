@@ -118,3 +118,14 @@ Syntax
 docker <management-command> <sub-command> (options)
 #+END_SRC
 
+**** docker container 
+#+BEGIN_SRC shell
+# logs
+docker container logs <container-name> | <container-id>
+# stats
+docker container stats [<container-name> | <container-id>]
+# top
+docker container top [<container-name> | <container-id>]
+# inspect
+docker container inspect [<container-name> | <container-id>]
+#+END_SRC

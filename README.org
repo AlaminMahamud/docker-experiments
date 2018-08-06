@@ -167,13 +167,13 @@ docker container <COMMAND> (Options)
  docker container ls
  # Show all containers
  docker container ls -a
-# logs
-docker container logs <container-name> | <container-id>
-# stats
-docker container stats [<container-name> | <container-id>]
-# top
-docker container top [<container-name> | <container-id>]
-# inspect
-docker container inspect [<container-name> | <container-id>]
+ # logs
+ docker container logs <container-name> | <container-id>
+ # stats
+ docker container stats [<container-name> | <container-id>]
+ # top
+ docker container top [<container-name> | <container-id>]
+ # inspect
+ docker container inspect [<container-name> | <container-id>]
 #+END_SRC
 

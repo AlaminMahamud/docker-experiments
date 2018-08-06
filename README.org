@@ -118,8 +118,55 @@ Syntax
 docker <management-command> <sub-command> (options)
 #+END_SRC
 
-**** docker container 
+**** Containers
+Syntax
 #+BEGIN_SRC shell
+docker container <COMMAND> (Options)
+#+END_SRC
+
+#+BEGIN_SRC python
+[
+   attach,
+   commit,
+   cp,
+   create,
+   diff,
+   exec,
+   inspect,
+   kill,
+   logs,
+   ls,
+   pause,
+   port,
+   prune,
+   rename,
+   restart,
+   rm,
+   run,
+   start,
+   stop,
+   top,
+   unpause,
+   update,
+   wait
+]
+#+END_SRC
+
+#+BEGIN_SRC shell
+ # Start a container
+ docker container run --publish 8080:80 nginx
+ # Start a detached container
+ docker container run --publish 8080:80 --detach nginx
+ # Start a named detached container
+ docker container run \
+                  --publish 8080:80 \
+		  --detach \
+		  --name webhost nginx
+ 
+ # Show running containers
+ docker container ls
+ # Show all containers
+ docker container ls -a
 # logs
 docker container logs <container-name> | <container-id>
 # stats
@@ -129,3 +176,4 @@ docker container top [<container-name> | <container-id>]
 # inspect
 docker container inspect [<container-name> | <container-id>]
 #+END_SRC
+

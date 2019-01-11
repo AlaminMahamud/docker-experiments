@@ -178,3 +178,27 @@ docker container <COMMAND> (Options)
  docker container inspect [<container-name> | <container-id>]
 ```
 
+
+## Docker Networking
+* Network Drivers
+  * **bridge** - default
+	* usecase - applications run in stand alone containers that need to communicate
+  * **host** - remove network isolation between the container and the docker host, and use the host's networking directly.
+	* usecase - available for swarm
+  * **overlay** network
+	- connect multiple docker daemons together and enable swarm services to communicate with each other. 
+	- use overlay networks to facilitate communication between a swarm service and a stand-alone container, or between two stand-alone containers on different docker daemons
+  * **macvlan** network
+	- assign a MAC address to a container, appear as a physical device.
+	- routes traffic to a container by MAC address.
+  * **none** - disable all networking
+
+* Network Driver Summary
+  - User Defined Bridge: best when you need multiple containers to communicate on the same docker host.
+  - Host Network: network stack should not be isolated but other stack of docker should.
+  - Overlay Network: best when running on cluster or swarm
+  - Macvlan Network: best when migrating from a VM setup or need your containers to look like Physical hosts on your network, each with a unique MAC Address
+
+* Extra Drivers EE
+  - HTTP Routing Mesh
+  - Session Stickiness

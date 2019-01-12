@@ -202,3 +202,36 @@ docker container <COMMAND> (Options)
 * Extra Drivers EE
   - HTTP Routing Mesh
   - Session Stickiness
+## Communicating between containers
+
+``` bash
+docker run -d --name redis-server redis
+```
+
+``` bash
+docker  run --link redis-server:redis alpine env
+```
+
+``` bash
+docker run --link redis-server:redis alpine cat /etc/hosts
+```
+
+``` bash
+docker run --link redis-server:redis alpine ping -c 1 redis
+```
+
+``` bash
+docker run -d -p 3000:3000 \
+	--link redis-server:redis \
+	katacoda/redis-node-docker-example
+```
+
+``` bash
+curl docker:3000
+```
+
+``` bash
+docker run -it \
+	--link redis-server:redis \
+	redis redis-cli -h redis
+```

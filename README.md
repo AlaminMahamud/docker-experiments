@@ -383,3 +383,70 @@ docker logs restart-3
 docker run -d --name restart-always --restart=always scrapbook/docker-restart-example
 docker logs restart-always
 ```
+
+## Adding Docker Metadata and Labels
+### Recommended Guidelines
+- Firstly, all tools should prefix their keys with the reverse DNS notation of a domain controlled by the author. For example, com.katacoda.some-label.
+
+- Secondly, if you're creating labels for CLI use, then they should follow the DNS notation making it easier for users to type.
+
+- Finally, keys should only consist of lower-cased alphanumeric characters, dots and dashes (for example, [a-z0-9-.])
+
+
+### Docker Containers
+
+```
+# Single Label
+docker run -l user=12345 -d redis
+echo 'user=123461' >> labels && echo 'role=cache' >> labels
+
+# The --label-file=<filename> option will create a label for each line in the file.
+docker run --label-file=labels -d redis
+```
+
+### Docker Images
+Labelling images work in the same way as containers but are set in the Dockerfile when the image is built. When a container has launched the labels of the image will be applied to the container instance.
+
+* Single Label
+```dockerfile
+LABEL vendor=Katacoda
+```
+
+* Multiple Labels
+If we want to assign multiple labels then, we can use the format below with a label on each line, joined using a back-slash ("\"). Notice we're using the DNS notation format for labels which are related to third party tooling.
+```dockerfile
+LABEL vendor=Katacoda \ com.katacoda.version=0.0.5 \ com.katacoda.build-date=2016-07-01T10:47:29Z \ com.katacoda.course=Docker
+```
+
+### Docker Inspect
+Labels and Metadata are only useful if you can view/query them later. The first approach to viewing all the labels for a particular container or image is by using `docker inspect`.
+
+```
+docker inspect -f "{{json .Config.Labels }}" <container-name-or-hash>
+```
+
+* Image
+```shell
+docker inspect -f "{{json .ContainerConfig.Labels }}" katacoda-label-example
+```
+
+### Query By Label
+* Filtering Containers
+```shell
+docker ps --filter "label=user=scrapbook"
+```
+
+* Filtering Images
+```shell
+docker images --filter "label=vendor=Katacoda"
+```
+
+### Daemon Labels
+Labels are not only applied to images and containers but also the Docker Daemon itself. When you launch an instance of the daemon, you can assign it labels to help identify how it should be used, for example, if it's a development or production server or if it's more suited to particular roles such running databases.
+
+```shell
+docker -d \
+-H unix:///var/run/docker.sock \
+--label com.katacoda.environment="production" \
+--label com.katacoda.storage="ssd"
+```

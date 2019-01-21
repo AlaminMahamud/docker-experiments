@@ -294,3 +294,16 @@ Now reach to `redis` using alias `db`, they will be given the IP address of our 
 ```
 docker run --net=frontend-network2 alpine ping -c1 db
 ```
+
+* Disconnect Containers
+```
+docker network ls
+```
+
+```
+docker network inspect <network-name>
+```
+
+```
+docker network disconnect <network-name> <container-name>
+```

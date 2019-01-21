@@ -450,3 +450,6 @@ docker -d \
 --label com.katacoda.environment="production" \
 --label com.katacoda.storage="ssd"
 ```
+
+### Service Discovery Pattern
+The Service Discovery pattern is where the application uses a third party system to identify the location of the target service. For example, if our application wanted to talk to a database, it would first ask an API what the IP address of the database is. This pattern allows you to quickly reconfigure and scale your architectures with improved fault tolerance than fixed locations.

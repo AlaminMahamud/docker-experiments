@@ -177,8 +177,6 @@ docker container <COMMAND> (Options)
  # inspect
  docker container inspect [<container-name> | <container-id>]
 ```
-
-
 ## Docker Networking
 * Network Drivers
   * **bridge** - default
@@ -235,7 +233,7 @@ docker run -it \
 	--link redis-server:redis \
 	redis redis-cli -h redis
 ```
-## Docker Networks
+## More Networking in Docker
 * Create Network
 ```
 docker network create backend-network
@@ -306,4 +304,32 @@ docker network inspect <network-name>
 
 ```
 docker network disconnect <network-name> <container-name>
+```
+## Persisting Data using volumes
+Docker Volumes allows you to upgrade containers, restart machines and share data without data loss. This is essential when updating database or application versions.
+
+Docker Volumes are created and assigned when containers are started. Data Volumes allow you to map a host directory to a container for sharing data.
+
+This mapping is bi-directional. It allows data stored on the host to be accessed from within the container. It also means data saved by the process inside the container is persisted on the host.
+
+```shell
+docker run -v /docker/redis-data:/data --name r1 redis redis-server --appendonly=yes
+cat data | docker exec -i r1 redis-cli --pipe
+ls /docker/redis-data
+docker run -v /docker/redis-data:/backup ubuntu ls /backup
+```
+
+* Shared Volumes
+An alternate approach is to use `--volumes-from`. The parameter maps the mapped volumes from the source container to the container being launched
+
+In this case, we're mapping our Redis container's volume to an Ubuntu container. The /data directory only exists within our Redis container, however, because of -volumes-from our Ubuntu container can access the data.
+
+```
+docker run --volumes-from r1 -it ubuntu ls /data
+```
+
+* Read-only volumes
+If the container attempts to modify data within the directory it will error.
+```
+docker run -v /docker/redis-data:/data:ro -it ubuntu rm -rf /data
 ```

@@ -360,3 +360,26 @@ docker run -d --name redis-none --log-driver=none redis
 ```
 docker inspect --format '{{ .HostConfig.LogConfig }}' redis-server
 ```
+
+## Ensuring Container Uptime With Restart Policies
+### Stop On Fail
+Docker considers any containers to exit with a non-zero exit code to have crashed. By default a crashed container will remain stopped.
+
+* Lets start a container that exits with an error message
+```
+docker run -d --name restart-default scrapbook/docker-restart-example
+docker ps -a
+docker logs restart-default
+```
+
+* Restart on fail
+```
+docker run -d --name restart-3 --restart=on-failure:3 scrapbook/docker-restart-example
+docker logs restart-3
+```
+
+* Always Restart
+```
+docker run -d --name restart-always --restart=always scrapbook/docker-restart-example
+docker logs restart-always
+```

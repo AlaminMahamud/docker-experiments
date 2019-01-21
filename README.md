@@ -353,5 +353,10 @@ The log-driver is designed to be used when syslog is being collected and aggrega
 you need to access them via the syslog stream
 
 ### Disable Logging
-```docker run -d --name redis-none --log-driver=none redis```
-```docker inspect --format '{{ .HostConfig.LogConfig }}' redis-server```
+```
+docker run -d --name redis-none --log-driver=none redis
+```
+
+```
+docker inspect --format '{{ .HostConfig.LogConfig }}' redis-server
+```

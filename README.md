@@ -333,3 +333,25 @@ If the container attempts to modify data within the directory it will error.
 ```
 docker run -v /docker/redis-data:/data:ro -it ubuntu rm -rf /data
 ```
+
+## Managing Log Files
+* Docker Logs
+```docker run -d --name redis-server redis```
+```docker logs  redis-server```
+
+### Syslog
+By default, the Docker logs are outputting using the json-file logger meaning the output stored in a JSON file on the host. This can result in large files filling the disk. As a result, you can change the log driver to move to a different destination.
+
+The Syslog log driver will write all the container logs to the central syslog on the host. "syslog is a widely used standard for message logging. It permits separation of the software that generates messages, the system that stores them, and the software that reports and analyses them
+
+The log-driver is designed to be used when syslog is being collected and aggregated by an external system.
+
+### Example
+```docker run -d --name redis-syslog --log-driver=syslog redis```
+
+### Accessing Logs
+you need to access them via the syslog stream
+
+### Disable Logging
+```docker run -d --name redis-none --log-driver=none redis```
+```docker inspect --format '{{ .HostConfig.LogConfig }}' redis-server```

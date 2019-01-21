@@ -235,3 +235,62 @@ docker run -it \
 	--link redis-server:redis \
 	redis redis-cli -h redis
 ```
+## Docker Networks
+* Create Network
+```
+docker network create backend-network
+```
+* Connect to network
+```
+docker run -d --name=redis \
+              --net=backend-network \
+              redis
+```
+
+Unlike using links, docker network behave like traditional networks where nodes can be attached/detached.
+
+```
+docker run --net=backend-network alpine env
+docker run --net=backend-network alpine cat /etc/hosts
+```
+
+Instead, the way containers can communicate via an Embedded DNS Server in Docker.
+The DNS Server in assigned to all containers via the IP `127.0.0.11` and set in the `/etc/resolv.conf`
+
+When containers attempt to access other containers via a well-known name, such as Redis, the DNS server will return the IP address of the correct Container. In this case, the fully qualified name of Redis will be redis.backend-network.
+```
+docker run --net=backend-network alpine ping -c1 redis
+```
+
+* Connect two containers
+```
+docker network create frontend-network
+```
+When using the connect command it is possible to attach existing containers to the network.
+```
+docker network connect frontend-network redis
+docker run -d \
+           -p 3000:3000 \
+           --net=frontend-network \
+           katacoda/redis-node-docker-example
+```
+
+```
+curl docker:3000
+# tip: to resolve ip address of a host -
+# getent hosts <host> | awk '{print $1}'
+```
+
+* Connect Container with Alias
+this will connect redis instance to the frontend-network with the alias of db
+
+```
+docker network create frontend-network2
+docker network connect --alias db frontend-network2 redis
+```
+
+Now reach to `redis` using alias `db`, they will be given the IP address of our Redis container.
+
+```
+docker run --net=frontend-network2 alpine ping -c1 db
+```

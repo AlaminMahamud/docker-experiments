@@ -7,5 +7,4 @@ docker-machine ssh myvm2 "docker swarm join \
 --token <token> \
 <ip>:2377"
 docker-machine ssh myvm1 "docker node ls"
-
 ```

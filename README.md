@@ -396,11 +396,11 @@ docker logs restart-always
 ### Docker Containers
 
 ```
-# Single Label
+## Single Label
 docker run -l user=12345 -d redis
 echo 'user=123461' >> labels && echo 'role=cache' >> labels
 
-# The --label-file=<filename> option will create a label for each line in the file.
+## The --label-file=<filename> option will create a label for each line in the file.
 docker run --label-file=labels -d redis
 ```
 
@@ -453,3 +453,51 @@ docker -d \
 
 ### Service Discovery Pattern
 The Service Discovery pattern is where the application uses a third party system to identify the location of the target service. For example, if our application wanted to talk to a database, it would first ask an API what the IP address of the database is. This pattern allows you to quickly reconfigure and scale your architectures with improved fault tolerance than fixed locations.
+
+
+## Cleanup Docker Resources
+### Docker prune
+**Easiest Method** 
+
+``` bash
+docker system prune -a
+```
+
+### Delete Volumes 
+``` bash
+docker volume rm $(docker volume ls -qf dangling=true)
+docker volume ls -qf dangling=true | xargs -r docker volume rm
+```
+### Delete Networks
+
+``` bash
+docker network ls
+docker network ls | grep "bridge"
+docker network ls | grep "bridge" | awk '{print $1}'
+docker network rm $(docker network ls | grep "bridge" | awk '{print $1}')
+```
+
+### Remove Docker Images
+
+``` bash
+docker images
+docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+
+docker images | grep "none"
+docker rmi $(docker images | grep "none" | awk '{print $3}')
+```
+
+
+### Remove docker Containers
+
+``` bash
+docker ps
+docker ps -a
+docker rm $(docker ps -qa --no-trunc --filter "status=exited")
+```
+
+### Resize disk space for docker vm
+
+``` bash
+docker-machine create --driver virtualbox --virtualbox-disk-size "40000" default
+```

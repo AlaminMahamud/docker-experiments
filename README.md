@@ -493,7 +493,7 @@ The Service Discovery pattern is where the application uses a third party system
 
 ### Docker prune
 
-**Easiest Method**
+- Easiest Method
 
 ```bash
 docker system prune -a
@@ -537,4 +537,14 @@ docker rm $(docker ps -qa --no-trunc --filter "status=exited")
 
 ```bash
 docker-machine create --driver virtualbox --virtualbox-disk-size "40000" default
+```
+
+## Docker Commit Containers
+
+```bash
+$ docker run -it centos
+[root@3564ac1f52ec /] # do some stuff here...
+[root@3564ac1f52ec /] exit
+$ docker commit 3564ac1f52ec <image-name>
+$ docker run -it <image-name>
 ```

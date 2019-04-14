@@ -1,9 +1,10 @@
 # Docker Experiments
+
 A Self Sufficient RT for containers.
 
 ## Commands
 
-``` bash
+```bash
 docker version
 ---------------
 
@@ -30,7 +31,7 @@ docker version
 
 ```
 
-``` bash
+```bash
 docker info
 -----------------
 | Containers:   | 29                                                          |                                          |                 |      |          |           |            |        |        |
@@ -80,8 +81,8 @@ docker info
 |               |                                                             |                                          |                 |      |          |           |            |        |        |
 ```
 
-
 ### Options
+
 ```bash
       --config string      Location of client config files (default "/home/alamin/.docker")
   -D, --debug              Enable debug mode
@@ -97,7 +98,8 @@ docker info
 ```
 
 ### Management Commands
-``` bash
+
+```bash
   config      Manage Docker configs
   container   Manage containers
   image       Manage images
@@ -112,16 +114,17 @@ docker info
   volume      Manage volumes
 ```
 
-* Syntax
+- Syntax
 
-``` bash
+```bash
 docker <management-command> <sub-command> (options)
 ```
 
 ### Containers
-* Syntax
 
-``` bash
+- Syntax
+
+```bash
 docker container <COMMAND> (Options)
 
 [
@@ -152,8 +155,7 @@ docker container <COMMAND> (Options)
 
 ```
 
-
-``` bash
+```bash
  # Start a container
  docker container run --publish 8080:80 nginx
  # Start a detached container
@@ -163,7 +165,7 @@ docker container <COMMAND> (Options)
                   --publish 8080:80 \
 		  --detach \
 		  --name webhost nginx
- 
+
  # Show running containers
  docker container ls
  # Show all containers
@@ -177,68 +179,72 @@ docker container <COMMAND> (Options)
  # inspect
  docker container inspect [<container-name> | <container-id>]
 ```
-## Docker Networking
-* Network Drivers
-  * **bridge** - default
-	* usecase - applications run in stand alone containers that need to communicate
-  * **host** - remove network isolation between the container and the docker host, and use the host's networking directly.
-	* usecase - available for swarm
-  * **overlay** network
-	- connect multiple docker daemons together and enable swarm services to communicate with each other. 
-	- use overlay networks to facilitate communication between a swarm service and a stand-alone container, or between two stand-alone containers on different docker daemons
-  * **macvlan** network
-	- assign a MAC address to a container, appear as a physical device.
-	- routes traffic to a container by MAC address.
-  * **none** - disable all networking
 
-* Network Driver Summary
+## Docker Networking
+
+- Network Drivers
+
+  - **bridge** - default \* usecase - applications run in stand alone containers that need to communicate
+  - **host** - remove network isolation between the container and the docker host, and use the host's networking directly. \* usecase - available for swarm
+  - **overlay** network - connect multiple docker daemons together and enable swarm services to communicate with each other. - use overlay networks to facilitate communication between a swarm service and a stand-alone container, or between two stand-alone containers on different docker daemons
+  - **macvlan** network - assign a MAC address to a container, appear as a physical device. - routes traffic to a container by MAC address.
+  - **none** - disable all networking
+
+- Network Driver Summary
+
   - User Defined Bridge: best when you need multiple containers to communicate on the same docker host.
   - Host Network: network stack should not be isolated but other stack of docker should.
   - Overlay Network: best when running on cluster or swarm
   - Macvlan Network: best when migrating from a VM setup or need your containers to look like Physical hosts on your network, each with a unique MAC Address
 
-* Extra Drivers EE
+- Extra Drivers EE
   - HTTP Routing Mesh
   - Session Stickiness
+
 ## Communicating between containers
 
-``` bash
+```bash
 docker run -d --name redis-server redis
 ```
 
-``` bash
+```bash
 docker  run --link redis-server:redis alpine env
 ```
 
-``` bash
+```bash
 docker run --link redis-server:redis alpine cat /etc/hosts
 ```
 
-``` bash
+```bash
 docker run --link redis-server:redis alpine ping -c 1 redis
 ```
 
-``` bash
+```bash
 docker run -d -p 3000:3000 \
 	--link redis-server:redis \
 	katacoda/redis-node-docker-example
 ```
 
-``` bash
+```bash
 curl docker:3000
 ```
 
-``` bash
+```bash
 docker run -it \
 	--link redis-server:redis \
 	redis redis-cli -h redis
 ```
+
 ## More Networking in Docker
-* Create Network
+
+- Create Network
+
 ```
 docker network create backend-network
 ```
-* Connect to network
+
+- Connect to network
+
 ```
 docker run -d --name=redis \
               --net=backend-network \
@@ -256,15 +262,19 @@ Instead, the way containers can communicate via an Embedded DNS Server in Docker
 The DNS Server in assigned to all containers via the IP `127.0.0.11` and set in the `/etc/resolv.conf`
 
 When containers attempt to access other containers via a well-known name, such as Redis, the DNS server will return the IP address of the correct Container. In this case, the fully qualified name of Redis will be redis.backend-network.
+
 ```
 docker run --net=backend-network alpine ping -c1 redis
 ```
 
-* Connect two containers
+- Connect two containers
+
 ```
 docker network create frontend-network
 ```
+
 When using the connect command it is possible to attach existing containers to the network.
+
 ```
 docker network connect frontend-network redis
 docker run -d \
@@ -279,8 +289,8 @@ curl docker:3000
 # getent hosts <host> | awk '{print $1}'
 ```
 
-* Connect Container with Alias
-this will connect redis instance to the frontend-network with the alias of db
+- Connect Container with Alias
+  this will connect redis instance to the frontend-network with the alias of db
 
 ```
 docker network create frontend-network2
@@ -293,7 +303,8 @@ Now reach to `redis` using alias `db`, they will be given the IP address of our 
 docker run --net=frontend-network2 alpine ping -c1 db
 ```
 
-* Disconnect Containers
+- Disconnect Containers
+
 ```
 docker network ls
 ```
@@ -305,7 +316,9 @@ docker network inspect <network-name>
 ```
 docker network disconnect <network-name> <container-name>
 ```
+
 ## Persisting Data using volumes
+
 Docker Volumes allows you to upgrade containers, restart machines and share data without data loss. This is essential when updating database or application versions.
 
 Docker Volumes are created and assigned when containers are started. Data Volumes allow you to map a host directory to a container for sharing data.
@@ -319,8 +332,8 @@ ls /docker/redis-data
 docker run -v /docker/redis-data:/backup ubuntu ls /backup
 ```
 
-* Shared Volumes
-An alternate approach is to use `--volumes-from`. The parameter maps the mapped volumes from the source container to the container being launched
+- Shared Volumes
+  An alternate approach is to use `--volumes-from`. The parameter maps the mapped volumes from the source container to the container being launched
 
 In this case, we're mapping our Redis container's volume to an Ubuntu container. The /data directory only exists within our Redis container, however, because of -volumes-from our Ubuntu container can access the data.
 
@@ -328,18 +341,21 @@ In this case, we're mapping our Redis container's volume to an Ubuntu container.
 docker run --volumes-from r1 -it ubuntu ls /data
 ```
 
-* Read-only volumes
-If the container attempts to modify data within the directory it will error.
+- Read-only volumes
+  If the container attempts to modify data within the directory it will error.
+
 ```
 docker run -v /docker/redis-data:/data:ro -it ubuntu rm -rf /data
 ```
 
 ## Managing Log Files
-* Docker Logs
-```docker run -d --name redis-server redis```
-```docker logs  redis-server```
+
+- Docker Logs
+  `docker run -d --name redis-server redis`
+  `docker logs redis-server`
 
 ### Syslog
+
 By default, the Docker logs are outputting using the json-file logger meaning the output stored in a JSON file on the host. This can result in large files filling the disk. As a result, you can change the log driver to move to a different destination.
 
 The Syslog log driver will write all the container logs to the central syslog on the host. "syslog is a widely used standard for message logging. It permits separation of the software that generates messages, the system that stores them, and the software that reports and analyses them
@@ -347,12 +363,15 @@ The Syslog log driver will write all the container logs to the central syslog on
 The log-driver is designed to be used when syslog is being collected and aggregated by an external system.
 
 ### Example
-```docker run -d --name redis-syslog --log-driver=syslog redis```
+
+`docker run -d --name redis-syslog --log-driver=syslog redis`
 
 ### Accessing Logs
+
 you need to access them via the syslog stream
 
 ### Disable Logging
+
 ```
 docker run -d --name redis-none --log-driver=none redis
 ```
@@ -362,36 +381,42 @@ docker inspect --format '{{ .HostConfig.LogConfig }}' redis-server
 ```
 
 ## Ensuring Container Uptime With Restart Policies
+
 ### Stop On Fail
+
 Docker considers any containers to exit with a non-zero exit code to have crashed. By default a crashed container will remain stopped.
 
-* Lets start a container that exits with an error message
+- Lets start a container that exits with an error message
+
 ```
 docker run -d --name restart-default scrapbook/docker-restart-example
 docker ps -a
 docker logs restart-default
 ```
 
-* Restart on fail
+- Restart on fail
+
 ```
 docker run -d --name restart-3 --restart=on-failure:3 scrapbook/docker-restart-example
 docker logs restart-3
 ```
 
-* Always Restart
+- Always Restart
+
 ```
 docker run -d --name restart-always --restart=always scrapbook/docker-restart-example
 docker logs restart-always
 ```
 
 ## Adding Docker Metadata and Labels
+
 ### Recommended Guidelines
+
 - Firstly, all tools should prefix their keys with the reverse DNS notation of a domain controlled by the author. For example, com.katacoda.some-label.
 
 - Secondly, if you're creating labels for CLI use, then they should follow the DNS notation making it easier for users to type.
 
 - Finally, keys should only consist of lower-cased alphanumeric characters, dots and dashes (for example, [a-z0-9-.])
-
 
 ### Docker Containers
 
@@ -405,43 +430,52 @@ docker run --label-file=labels -d redis
 ```
 
 ### Docker Images
+
 Labelling images work in the same way as containers but are set in the Dockerfile when the image is built. When a container has launched the labels of the image will be applied to the container instance.
 
-* Single Label
+- Single Label
+
 ```dockerfile
 LABEL vendor=Katacoda
 ```
 
-* Multiple Labels
-If we want to assign multiple labels then, we can use the format below with a label on each line, joined using a back-slash ("\"). Notice we're using the DNS notation format for labels which are related to third party tooling.
+- Multiple Labels
+  If we want to assign multiple labels then, we can use the format below with a label on each line, joined using a back-slash ("\"). Notice we're using the DNS notation format for labels which are related to third party tooling.
+
 ```dockerfile
 LABEL vendor=Katacoda \ com.katacoda.version=0.0.5 \ com.katacoda.build-date=2016-07-01T10:47:29Z \ com.katacoda.course=Docker
 ```
 
 ### Docker Inspect
+
 Labels and Metadata are only useful if you can view/query them later. The first approach to viewing all the labels for a particular container or image is by using `docker inspect`.
 
 ```
 docker inspect -f "{{json .Config.Labels }}" <container-name-or-hash>
 ```
 
-* Image
+- Image
+
 ```shell
 docker inspect -f "{{json .ContainerConfig.Labels }}" katacoda-label-example
 ```
 
 ### Query By Label
-* Filtering Containers
+
+- Filtering Containers
+
 ```shell
 docker ps --filter "label=user=scrapbook"
 ```
 
-* Filtering Images
+- Filtering Images
+
 ```shell
 docker images --filter "label=vendor=Katacoda"
 ```
 
 ### Daemon Labels
+
 Labels are not only applied to images and containers but also the Docker Daemon itself. When you launch an instance of the daemon, you can assign it labels to help identify how it should be used, for example, if it's a development or production server or if it's more suited to particular roles such running databases.
 
 ```shell
@@ -452,25 +486,29 @@ docker -d \
 ```
 
 ### Service Discovery Pattern
+
 The Service Discovery pattern is where the application uses a third party system to identify the location of the target service. For example, if our application wanted to talk to a database, it would first ask an API what the IP address of the database is. This pattern allows you to quickly reconfigure and scale your architectures with improved fault tolerance than fixed locations.
 
-
 ## Cleanup Docker Resources
-### Docker prune
-**Easiest Method** 
 
-``` bash
+### Docker prune
+
+**Easiest Method**
+
+```bash
 docker system prune -a
 ```
 
-### Delete Volumes 
-``` bash
+### Delete Volumes
+
+```bash
 docker volume rm $(docker volume ls -qf dangling=true)
 docker volume ls -qf dangling=true | xargs -r docker volume rm
 ```
+
 ### Delete Networks
 
-``` bash
+```bash
 docker network ls
 docker network ls | grep "bridge"
 docker network ls | grep "bridge" | awk '{print $1}'
@@ -479,7 +517,7 @@ docker network rm $(docker network ls | grep "bridge" | awk '{print $1}')
 
 ### Remove Docker Images
 
-``` bash
+```bash
 docker images
 docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
 
@@ -487,10 +525,9 @@ docker images | grep "none"
 docker rmi $(docker images | grep "none" | awk '{print $3}')
 ```
 
-
 ### Remove docker Containers
 
-``` bash
+```bash
 docker ps
 docker ps -a
 docker rm $(docker ps -qa --no-trunc --filter "status=exited")
@@ -498,6 +535,6 @@ docker rm $(docker ps -qa --no-trunc --filter "status=exited")
 
 ### Resize disk space for docker vm
 
-``` bash
+```bash
 docker-machine create --driver virtualbox --virtualbox-disk-size "40000" default
 ```
